@@ -61,8 +61,8 @@ public class Task {
         this.type = type;
         this.resource = resource;
         this.name = type == TaskType.MUSIC ? ((NetMusicInfo) resource).toSimpleString() : ((NetMvInfo) resource).toSimpleString();
-        this.dest = type == TaskType.MUSIC ? SimplePath.DOWNLOAD_MUSIC_PATH + ((NetMusicInfo) resource).toSimpleFileName()
-                : SimplePath.DOWNLOAD_MV_PATH + ((NetMvInfo) resource).toSimpleFileName();
+        this.dest = type == TaskType.MUSIC ? SimplePath.DOWNLOAD_MUSIC_PATH + ((NetMusicInfo) resource).toDownloadFileName()
+                : SimplePath.DOWNLOAD_MV_PATH + ((NetMvInfo) resource).toDownloadFileName();
         this.format = type == TaskType.MUSIC ? ((NetMusicInfo) resource).getDownFormat() : ((NetMvInfo) resource).getDownFormat();
     }
 
@@ -182,12 +182,12 @@ public class Task {
             MusicServerUtil.fillMusicUrl(musicInfo, true);
             MusicServerUtil.fillLyric(musicInfo);
             url = musicInfo.getDownUrl();
-            dest = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toSimpleFileName();
+            dest = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toDownloadFileName();
         } else if (type == TaskType.MV) {
             NetMvInfo mvInfo = (NetMvInfo) resource;
             MusicServerUtil.fillMvInfo(mvInfo, true);
             url = mvInfo.getDownUrl();
-            dest = SimplePath.DOWNLOAD_MV_PATH + mvInfo.toSimpleFileName();
+            dest = SimplePath.DOWNLOAD_MV_PATH + mvInfo.toDownloadFileName();
         }
     }
 

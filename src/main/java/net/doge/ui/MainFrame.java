@@ -249,8 +249,8 @@ public class MainFrame extends JFrame {
             "Q1：如何导入我的歌单？\nA1：无需登录，在“用户”选项卡搜索自己的用户名，右键选择“查看用户歌单”，收藏即可\n" +
             "注：\n1.此操作要求你的歌单权限是公开的，不能是私密，否则看不到\n" +
             "2.如果你确实不想公开你的歌单，也可以在“歌单”选项卡勾上“歌单 ID”，搜索你的歌单 ID\n\n" +
-            "Q2：如何下载无损 FLAC 音质？\nA2：“设置”->“播放与历史”->“优先音质”可以设置播放和下载时的音质\n" +
-            "注：选择无损音质时，不支持 FLAC 直接播放，需调用 FFmpeg 转为 MP3 进行播放，但不影响下载 FLAC 文件\n\n" +
+            "Q2：如何下载无损 FLAC 音质？\nA2：“设置”->“下载与缓存”/“播放与历史”->“优先音质”可以分别设置下载和播放时的音质\n" +
+            "注：播放音质选择无损时，不支持直接播放 FLAC，需调用 FFmpeg 转为 MP3 进行播放，但不影响下载 FLAC 文件\n\n" +
             "Q3：如何进行收藏、下载等其他操作？\nA3：通过右键菜单操作，除此之外还有很多功能都在右键菜单里，等你探索~\n\n" +
             "Q4：如何批量操作？\nA4：列表支持 Ctrl Shift 多选，Ctrl + A 全选\n\n" +
             "Q5：为什么有些歌曲名字和音频不一致？\nA5：付费或无版权歌曲采用自动换源机制，不能100%%保证一致，可以尝试手动换源搜索\n\n" +
@@ -3332,8 +3332,8 @@ public class MainFrame extends JFrame {
                     task = new Task(downloadList, type, musicInfo);
 
                     task.setOnFinished(() -> {
-                        String destMusicPath = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toSimpleFileName();
-                        String destLyricPath = SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toSimpleLmlFileName() : musicInfo.toSimpleLyricFileName());
+                        String destMusicPath = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toDownloadFileName();
+                        String destLyricPath = SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toDownloadLmlFileName() : musicInfo.toDownloadLyricFileName());
                         // 写入歌曲信息
                         MediaUtil.writeAudioFileInfo(destMusicPath, musicInfo);
                         // 自动下载歌词
@@ -18600,8 +18600,8 @@ public class MainFrame extends JFrame {
                 String dest = task.getDest();
                 if (task.isMusic()) {
                     NetMusicInfo musicInfo = (NetMusicInfo) task.getResource();
-                    FileUtil.delete(SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toSimpleLyricFileName());
-                    FileUtil.delete(SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toSimpleLmlFileName());
+                    FileUtil.delete(SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toDownloadLyricFileName());
+                    FileUtil.delete(SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toDownloadLmlFileName());
                     AudioFile audioFile = new AudioFile(dest);
                     // 卸载正在播放的文件
                     if (player.loadedAudioFile(audioFile)) unload();
@@ -19104,24 +19104,23 @@ public class MainFrame extends JFrame {
         });
         // 查看歌词文件
         browseLyricMenuItem.addActionListener(e -> {
-            String lyricPath;
+            File lyricFile;
             // 在线音乐先将歌词存为临时文件再查看
             if (player.loadedNetMusic()) {
                 NetMusicInfo musicInfo = player.getMusicInfo();
-                String lyricFileName = verbatimTimeline ? musicInfo.toLmlFileName() : musicInfo.toLyricFileName();
-                lyricPath = new File(SimplePath.CACHE_PATH + lyricFileName).getAbsolutePath();
+                String lyricFileName = verbatimTimeline ? musicInfo.toCacheLmlFileName() : musicInfo.toCacheLyricFileName();
+                lyricFile = new File(SimplePath.CACHE_PATH + lyricFileName);
                 String lyricStr = LyricUtil.getAppropriateLyricStr(musicInfo.getLyric(), verbatimTimeline);
-                FileUtil.writeStr(lyricStr, lyricPath);
+                FileUtil.writeStr(lyricStr, lyricFile);
             }
             // 本地音乐直接打开 lml / lrc 文件
             else {
                 AudioFile audioFile = player.getAudioFile();
                 // 优先读取 LML 歌词
-                File lyricFile = audioFile.toLmlFile();
+                lyricFile = audioFile.toLmlFile();
                 if (!lyricFile.exists()) lyricFile = audioFile.toLyricFile();
-                lyricPath = lyricFile.getAbsolutePath();
             }
-            DesktopUtil.edit(lyricPath);
+            DesktopUtil.edit(lyricFile);
         });
         // 下载歌词文件
         downloadLyricMenuItem.addActionListener(e -> downloadLyric(player.getMusicInfo()));
@@ -20651,7 +20650,7 @@ public class MainFrame extends JFrame {
                 // 酷狗的链接给的 wav，实际上是 mp3 格式，这种情况以 mp3 格式下载到本地再播放
                 // 另外 flac 格式文件先下载 flac 文件，转为 mp3 格式再播放
                 if (url.endsWith(Format.WAV) || musicInfo.isFlacPlayFormat()) {
-                    String fileName = musicInfo.toFileName();
+                    String fileName = musicInfo.toCacheFileName();
                     file = new AudioFile(SimplePath.CACHE_PATH + fileName);
                     AudioFile tmpFile = new AudioFile(FileUtil.replaceSuffix(file, Format.MP3));
                     if (!tmpFile.exists()) {
@@ -22170,7 +22169,7 @@ public class MainFrame extends JFrame {
             try {
                 FileUtil.mkDir(SimplePath.DOWNLOAD_MUSIC_PATH);
                 String lyricStr = LyricUtil.getAppropriateLyricStr(musicInfo.getLyric(), verbatimTimeline);
-                FileUtil.writeStr(lyricStr, SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toSimpleLmlFileName() : musicInfo.toSimpleLyricFileName()));
+                FileUtil.writeStr(lyricStr, SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toDownloadLmlFileName() : musicInfo.toDownloadLyricFileName()));
                 new TipDialog(THIS, DOWNLOAD_COMPLETED_MSG).showDialog();
             } catch (Exception e) {
                 ExceptionUtil.handleResourceException(e, THIS);
@@ -22183,8 +22182,8 @@ public class MainFrame extends JFrame {
         // 创建下载任务，并加入队列
         Task task = new Task(downloadList, TaskType.MUSIC, musicInfo);
         task.setOnFinished(() -> {
-            String destMusicPath = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toSimpleFileName();
-            String destLyricPath = SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toSimpleLmlFileName() : musicInfo.toSimpleLyricFileName());
+            String destMusicPath = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toDownloadFileName();
+            String destLyricPath = SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toDownloadLmlFileName() : musicInfo.toDownloadLyricFileName());
             // 写入歌曲信息
             MediaUtil.writeAudioFileInfo(destMusicPath, musicInfo);
             // 自动下载歌词
@@ -22210,8 +22209,8 @@ public class MainFrame extends JFrame {
             // 创建下载任务，并加入队列
             Task task = new Task(downloadList, TaskType.MUSIC, musicInfo);
             task.setOnFinished(() -> {
-                String destMusicPath = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toSimpleFileName();
-                String destLyricPath = SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toSimpleLmlFileName() : musicInfo.toSimpleLyricFileName());
+                String destMusicPath = SimplePath.DOWNLOAD_MUSIC_PATH + musicInfo.toDownloadFileName();
+                String destLyricPath = SimplePath.DOWNLOAD_MUSIC_PATH + (verbatimTimeline ? musicInfo.toDownloadLmlFileName() : musicInfo.toDownloadLyricFileName());
                 // 写入歌曲信息
                 MediaUtil.writeAudioFileInfo(destMusicPath, musicInfo);
                 // 自动下载歌词
@@ -22329,7 +22328,7 @@ public class MainFrame extends JFrame {
 
                 // 不支持的格式转为 mp4 格式再播放
                 if (!mvInfo.isMp4PlayFormat()) {
-                    String fileName = mvInfo.toFileName();
+                    String fileName = mvInfo.toCacheFileName();
                     file = new File(SimplePath.CACHE_PATH + fileName);
                     // 转为 mp4 再播放
                     File tmpFile = FileUtil.replaceSuffix(file, Format.MP4);

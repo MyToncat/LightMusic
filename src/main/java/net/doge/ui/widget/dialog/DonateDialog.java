@@ -33,7 +33,8 @@ public class DonateDialog extends AbstractTitledDialog {
             "https://github.com/jsososo/MiguMusicApi\n" +
             "https://github.com/SocialSisterYi/bilibili-API-collect\n" +
             "https://github.com/lyswhut/lx-music-source\n" +
-            "https://github.com/QiuChenlyOpenSource/MusicDownload\n";
+            "https://github.com/QiuChenlyOpenSource/MusicDownload\n" +
+            "https://github.com/CharlesPikachu/musicdl\n";
 
     // 收款码
     private ImageIcon weixinIcon = LMIconManager.getIcon("dialog.weixin");

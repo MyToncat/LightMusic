@@ -209,33 +209,33 @@ public class NetMusicInfo implements MusicResource, NetResource, Downloadable {
     }
 
     public String toAlbumImageFileName() {
-        return FileUtil.filterFileName(toSimpleString() + SEPARATOR + id + "." + Format.JPG);
+        return FileUtil.filterFileName(toCacheFileBaseName() + "." + Format.JPG);
     }
 
-    // 用于播放的文件名
-    public String toFileName() {
-        return FileUtil.filterFileName(toSimpleString() + SEPARATOR + id + "." + playFormat);
+    // 用于缓存的文件名
+    public String toCacheFileName() {
+        return FileUtil.filterFileName(toCacheFileBaseName() + "." + playFormat);
     }
 
     // 用于下载的文件名
-    public String toSimpleFileName() {
-        return FileUtil.filterFileName(toSimpleString() + "." + downFormat);
+    public String toDownloadFileName() {
+        return FileUtil.filterFileName(toDownloadFileBaseName() + "." + downFormat);
     }
 
-    public String toLyricFileName() {
-        return FileUtil.filterFileName(toSimpleString() + SEPARATOR + id + "." + Format.LRC);
+    public String toCacheLyricFileName() {
+        return FileUtil.filterFileName(toCacheFileBaseName() + "." + Format.LRC);
     }
 
-    public String toSimpleLyricFileName() {
-        return FileUtil.filterFileName(toSimpleString() + "." + Format.LRC);
+    public String toDownloadLyricFileName() {
+        return FileUtil.filterFileName(toDownloadFileBaseName() + "." + Format.LRC);
     }
 
-    public String toLmlFileName() {
-        return FileUtil.filterFileName(toSimpleString() + SEPARATOR + id + "." + Format.LML);
+    public String toCacheLmlFileName() {
+        return FileUtil.filterFileName(toCacheFileBaseName() + "." + Format.LML);
     }
 
-    public String toSimpleLmlFileName() {
-        return FileUtil.filterFileName(toSimpleString() + "." + Format.LML);
+    public String toDownloadLmlFileName() {
+        return FileUtil.filterFileName(toDownloadFileBaseName() + "." + Format.LML);
     }
 
     public String toString() {
@@ -244,6 +244,14 @@ public class NetMusicInfo implements MusicResource, NetResource, Downloadable {
 
     public String toSimpleString() {
         return StringUtil.shorten(name + (StringUtil.notEmpty(artist) ? SEPARATOR + artist : ""), 230);
+    }
+
+    public String toDownloadFileBaseName() {
+        return toSimpleString();
+    }
+
+    public String toCacheFileBaseName() {
+        return toDownloadFileBaseName() + SEPARATOR + id;
     }
 
     public String toKeywords() {

@@ -161,13 +161,13 @@ public class NetMvInfo implements NetResource, Downloadable {
     }
 
     // 用于播放的文件名
-    public String toFileName() {
-        return FileUtil.filterFileName(toSimpleString() + SEPARATOR + id + "." + playFormat);
+    public String toCacheFileName() {
+        return FileUtil.filterFileName(toCacheFileBaseName() + "." + playFormat);
     }
 
     // 用于下载的文件名
-    public String toSimpleFileName() {
-        return FileUtil.filterFileName(toSimpleString() + "." + downFormat);
+    public String toDownloadFileName() {
+        return FileUtil.filterFileName(toDownloadFileBaseName() + "." + downFormat);
     }
 
     public String toString() {
@@ -176,5 +176,13 @@ public class NetMvInfo implements NetResource, Downloadable {
 
     public String toSimpleString() {
         return StringUtil.shorten(name + (StringUtil.notEmpty(artist) ? SEPARATOR + artist : ""), 230);
+    }
+
+    public String toDownloadFileBaseName() {
+        return toSimpleString();
+    }
+
+    public String toCacheFileBaseName() {
+        return toDownloadFileBaseName() + SEPARATOR + id;
     }
 }

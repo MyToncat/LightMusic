@@ -99,6 +99,7 @@ jdk8（**必须是最稳定的8版本**，且**8自带了JavaFX开发工具包�
 - [SocialSisterYi/bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect)
 - [lyswhut/lx-music-source](https://github.com/lyswhut/lx-music-source)
 - [QiuChenlyOpenSource/MusicDownload](https://github.com/QiuChenlyOpenSource/MusicDownload)
+- [CharlesPikachu/musicdl](https://github.com/CharlesPikachu/musicdl)
 
 ### 项目协议
 

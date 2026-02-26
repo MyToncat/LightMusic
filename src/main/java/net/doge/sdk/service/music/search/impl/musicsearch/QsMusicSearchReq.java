@@ -36,7 +36,7 @@ public class QsMusicSearchReq {
      */
     public CommonResult<NetMusicInfo> searchMusic(String keyword, int page, int limit) {
         List<NetMusicInfo> r = new LinkedList<>();
-        int t;
+        int t = 0;
 
         // 对关键词编码
         String encodedKeyword = UrlUtil.encodeAll(keyword);
@@ -44,10 +44,11 @@ public class QsMusicSearchReq {
         String musicInfoBody = HttpRequest.get(String.format(SEARCH_MUSIC_QS_API, encodedKeyword, (page - 1) * 20))
                 .executeAsStr();
         JSONObject musicInfoJson = JSONObject.parseObject(musicInfoBody);
-        JSONObject result = musicInfoJson.getJSONArray("result_groups").getJSONObject(0);
-        JSONArray songArray = result.getJSONArray("data");
-        t = page * limit + (result.getBooleanValue("has_more") ? 1 : 0);
-        if (JsonUtil.notEmpty(songArray)) {
+        JSONArray resultGroups = musicInfoJson.getJSONArray("result_groups");
+        if (JsonUtil.notEmpty(resultGroups)) {
+            JSONObject result = resultGroups.getJSONObject(0);
+            JSONArray songArray = result.getJSONArray("data");
+            t = page * limit + (result.getBooleanValue("has_more") ? 1 : 0);
             for (int i = 0, len = songArray.size(); i < len; i++) {
                 JSONObject songJson = songArray.getJSONObject(i).getJSONObject("entity").getJSONObject("track");
                 JSONObject albumJson = songJson.getJSONObject("album");

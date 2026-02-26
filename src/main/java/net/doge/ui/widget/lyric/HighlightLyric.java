@@ -104,16 +104,10 @@ public class HighlightLyric {
         float fontSize = labelFont.getSize();
 
         // 初始化 Metrics
-        FontMetrics metrics = label.getFontMetrics(labelFont);
-        if (isDesktopLyric) {
-            metricsArray = new FontMetrics[Fonts.TYPES_HUGE.size()];
-            for (int i = 0, len = metricsArray.length; i < len; i++)
-                metricsArray[i] = label.getFontMetrics(Fonts.TYPES_HUGE.get(i).deriveFont(fontSize));
-        } else {
-            metricsArray = new FontMetrics[Fonts.TYPES_BIG.size()];
-            for (int i = 0, len = metricsArray.length; i < len; i++)
-                metricsArray[i] = label.getFontMetrics(Fonts.TYPES_BIG.get(i).deriveFont(fontSize));
-        }
+        List<Font> fonts = isDesktopLyric ? Fonts.TYPES_HUGE : Fonts.TYPES_BIG;
+        metricsArray = new FontMetrics[fonts.size()];
+        for (int i = 0, len = metricsArray.length; i < len; i++)
+            metricsArray[i] = label.getFontMetrics(fonts.get(i).deriveFont(fontSize));
 
         // 初始化每段时间数据，非逐字歌词需要等待 EndTime 传入后再更新
         if (isByWord) {
@@ -125,7 +119,6 @@ public class HighlightLyric {
         initWordWidthList(lyric);
 
         // 计算宽度
-        List<Font> fonts = isDesktopLyric ? Fonts.TYPES_HUGE : Fonts.TYPES_BIG;
         for (int i = 0, len = plainLyric.length(); i < len; i++) {
             int codePoint = plainLyric.codePointAt(i);
             char[] chars = Character.toChars(codePoint);
@@ -140,7 +133,7 @@ public class HighlightLyric {
         }
         // 桌面歌词阴影显示不完全解决
         width += 2 * shadowHOffset;
-        height = metrics.getHeight();
+        height = label.getFontMetrics(labelFont).getHeight();
         height += fontSize;
         // 渐隐宽度根据字体大小决定
         fadeWidth = height / 2;
@@ -198,6 +191,7 @@ public class HighlightLyric {
         String[] sp = ArrayUtil.removeFirstEmpty(isByWord ? lyric.split(LyricPattern.PAIR, -1) : lyric.split(""));
         // 计算每段的宽度
         int sum = 0;
+        List<Font> fonts = isDesktopLyric ? Fonts.TYPES_HUGE : Fonts.TYPES_BIG;
         for (String partStr : sp) {
             // 计算宽度前缀和
             wordWidthPrefixSumExcludedList.add(sum);
@@ -207,20 +201,11 @@ public class HighlightLyric {
                 char[] chars = Character.toChars(codePoint);
                 String str = new String(chars);
 
-                if (isDesktopLyric) {
-                    for (int j = 0, l = metricsArray.length; j < l; j++) {
-                        if (!Fonts.TYPES_HUGE.get(j).canDisplay(codePoint)) continue;
-                        w += metricsArray[j].stringWidth(str);
-                        i += chars.length - 1;
-                        break;
-                    }
-                } else {
-                    for (int j = 0, l = metricsArray.length; j < l; j++) {
-                        if (!Fonts.TYPES_BIG.get(j).canDisplay(codePoint)) continue;
-                        w += metricsArray[j].stringWidth(str);
-                        i += chars.length - 1;
-                        break;
-                    }
+                for (int j = 0, l = metricsArray.length; j < l; j++) {
+                    if (!fonts.get(j).canDisplay(codePoint)) continue;
+                    w += metricsArray[j].stringWidth(str);
+                    i += chars.length - 1;
+                    break;
                 }
             }
             sum += w;

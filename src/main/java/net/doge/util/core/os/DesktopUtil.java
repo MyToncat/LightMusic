@@ -61,12 +61,13 @@ public class DesktopUtil {
     }
 
     /**
-     * 编辑文本
+     * 编辑文本文件
      *
-     * @param path
+     * @param file
      * @return
      */
-    public static void edit(String path) {
+    public static void edit(File file) {
+        String path = file.getAbsolutePath();
         if (OsUtil.isWindows()) TerminalUtil.execAsync(String.format("notepad \"%s\"", path));
         else if (OsUtil.isMac()) TerminalUtil.execAsync(String.format("open -e \"%s\"", path));
         else if (OsUtil.isUnix()) TerminalUtil.execAsync(String.format("vim \"%s\"", path));
