@@ -82,9 +82,9 @@ public class MediaUtil {
             Tag tag = af.getTagAndConvertOrCreateAndSetDefault();
 
             setAlbumImageToTag(albumImg, tag);
-            tag.setField(FieldKey.TITLE, name);
-            tag.setField(FieldKey.ARTIST, artist);
-            tag.setField(FieldKey.ALBUM, albumName);
+            setFieldToTag(tag, FieldKey.TITLE, name);
+            setFieldToTag(tag, FieldKey.ARTIST, artist);
+            setFieldToTag(tag, FieldKey.ALBUM, albumName);
 
             af.commit();
         } catch (Exception e) {
@@ -124,24 +124,24 @@ public class MediaUtil {
             Tag tag = af.getTagAndConvertOrCreateAndSetDefault();
 
             setAlbumImageToTag(albumImg, tag);
-            tag.setField(FieldKey.TITLE, title);
-            tag.setField(FieldKey.ARTIST, artist);
-            tag.setField(FieldKey.ALBUM, albumName);
-            tag.setField(FieldKey.GENRE, genre);
-            tag.setField(FieldKey.LYRICS, lyrics);
-            tag.setField(FieldKey.LYRICIST, lyricist);
-            tag.setField(FieldKey.YEAR, year);
-            tag.setField(FieldKey.RATING, rating);
-            tag.setField(FieldKey.BPM, bpm);
-            tag.setField(FieldKey.KEY, key);
-            tag.setField(FieldKey.COMMENT, comment);
-            tag.setField(FieldKey.RECORD_LABEL, recordLabel);
-            tag.setField(FieldKey.MOOD, mood);
-            tag.setField(FieldKey.OCCASION, occasion);
-            tag.setField(FieldKey.LANGUAGE, language);
-            tag.setField(FieldKey.COUNTRY, country);
-            tag.setField(FieldKey.VERSION, version);
-            tag.setField(FieldKey.COPYRIGHT, copyright);
+            setFieldToTag(tag, FieldKey.TITLE, title);
+            setFieldToTag(tag, FieldKey.ARTIST, artist);
+            setFieldToTag(tag, FieldKey.ALBUM, albumName);
+            setFieldToTag(tag, FieldKey.GENRE, genre);
+            setFieldToTag(tag, FieldKey.LYRICS, lyrics);
+            setFieldToTag(tag, FieldKey.LYRICIST, lyricist);
+            setFieldToTag(tag, FieldKey.YEAR, year);
+            setFieldToTag(tag, FieldKey.RATING, rating);
+            setFieldToTag(tag, FieldKey.BPM, bpm);
+            setFieldToTag(tag, FieldKey.KEY, key);
+            setFieldToTag(tag, FieldKey.COMMENT, comment);
+            setFieldToTag(tag, FieldKey.RECORD_LABEL, recordLabel);
+            setFieldToTag(tag, FieldKey.MOOD, mood);
+            setFieldToTag(tag, FieldKey.OCCASION, occasion);
+            setFieldToTag(tag, FieldKey.LANGUAGE, language);
+            setFieldToTag(tag, FieldKey.COUNTRY, country);
+            setFieldToTag(tag, FieldKey.VERSION, version);
+            setFieldToTag(tag, FieldKey.COPYRIGHT, copyright);
 
             af.commit();
         } catch (Exception e) {
@@ -158,6 +158,13 @@ public class MediaUtil {
                 albumImg.getWidth(), albumImg.getHeight(), 24, 0);
         StandardArtwork artwork = StandardArtwork.createArtworkFromMetadataBlockDataPicture(picture);
         tag.setField(artwork);
+    }
+
+    // 为 Tag 设置 Field
+    private static void setFieldToTag(Tag tag, FieldKey key, String str) throws FieldDataInvalidException {
+        // 字段为空时直接删除字段，防止出现 Type 识别异常
+        if (StringUtil.isEmpty(str)) tag.deleteField(key);
+        else tag.setField(key, str);
     }
 
     /**
