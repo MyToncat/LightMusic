@@ -4416,9 +4416,9 @@ public class MainFrame extends JFrame {
                 String body = HttpRequest.get(SoftInfo.RELEASE).executeAsStr();
                 if (!mute) td.transitionClose();
                 Document doc = Jsoup.parse(body);
-                String latest = doc.select("h1.d-inline.mr-3").first().text().split(" ")[1], now = SoftInfo.VERSION;
+                String latest = doc.select("h1.d-inline").first().text().split(" ")[1], now = SoftInfo.VERSION;
                 String keyMD5 = doc.select("tbody tr td").last().text();
-                Elements li = doc.select(".markdown-body.my-3 ul").first().select("li");
+                Elements li = doc.select(".markdown-body ul").first().select("li");
                 StringJoiner sj = new StringJoiner("\n");
                 li.forEach(l -> sj.add("- " + l.text()));
                 String detail = sj.toString();

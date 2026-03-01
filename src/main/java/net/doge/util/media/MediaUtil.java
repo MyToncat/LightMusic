@@ -132,7 +132,7 @@ public class MediaUtil {
             setFieldToTag(tag, FieldKey.LYRICIST, lyricist);
             setFieldToTag(tag, FieldKey.YEAR, year);
             setFieldToTag(tag, FieldKey.RATING, rating);
-            setFieldToTag(tag, FieldKey.BPM, bpm);
+            setFieldToTag(tag, FieldKey.BPM, bpm, true);
             setFieldToTag(tag, FieldKey.KEY, key);
             setFieldToTag(tag, FieldKey.COMMENT, comment);
             setFieldToTag(tag, FieldKey.RECORD_LABEL, recordLabel);
@@ -162,9 +162,18 @@ public class MediaUtil {
 
     // 为 Tag 设置 Field
     private static void setFieldToTag(Tag tag, FieldKey key, String str) throws FieldDataInvalidException {
+        setFieldToTag(tag, key, str, false);
+    }
+
+    // 为 Tag 设置 Field
+    private static void setFieldToTag(Tag tag, FieldKey key, String str, boolean numRequired) throws FieldDataInvalidException {
         // 字段为空时直接删除字段，防止出现 Type 识别异常
         if (StringUtil.isEmpty(str)) tag.deleteField(key);
-        else tag.setField(key, str);
+        else {
+            // 要求为数字的字段，不满足条件直接跳出
+            if (numRequired && !StringUtil.isNumber(str)) return;
+            tag.setField(key, str);
+        }
     }
 
     /**
