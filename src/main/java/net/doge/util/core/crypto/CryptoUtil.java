@@ -6,6 +6,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import net.doge.util.core.log.LogUtil;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayOutputStream;
@@ -84,20 +85,74 @@ public class CryptoUtil {
     }
 
     /**
-     * AES 加密，返回 bytes
+     * AES ECB 加密，返回 bytes
      *
      * @param data
-     * @param mode
+     * @param key
+     * @return
+     */
+    public static byte[] aesEcbEncrypt(byte[] data, byte[] key) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            LogUtil.error(e);
+            return null;
+        }
+    }
+
+    /**
+     * AES CBC 加密，返回 bytes
+     *
+     * @param data
      * @param key
      * @param iv
      * @return
      */
-    public static byte[] aesEncrypt(byte[] data, String mode, byte[] key, byte[] iv) {
+    public static byte[] aesCbcEncrypt(byte[] data, byte[] key, byte[] iv) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/" + mode + "/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-            if (iv != null) cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(iv));
-            else cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(iv));
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            LogUtil.error(e);
+            return null;
+        }
+    }
+
+    /**
+     * AES GCM 加密，返回 bytes
+     *
+     * @param data
+     * @param key
+     * @param nonce
+     * @return
+     */
+    public static byte[] aesGcmEncrypt(byte[] data, byte[] key, byte[] nonce) {
+        return aesGcm(data, key, nonce, Cipher.ENCRYPT_MODE);
+    }
+
+    /**
+     * AES GCM 解密，返回 bytes
+     *
+     * @param data
+     * @param key
+     * @param nonce
+     * @return
+     */
+    public static byte[] aesGcmDecrypt(byte[] data, byte[] key, byte[] nonce) {
+        return aesGcm(data, key, nonce, Cipher.DECRYPT_MODE);
+    }
+
+    // AES GCM 加解密
+    public static byte[] aesGcm(byte[] data, byte[] key, byte[] nonce, int mode) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+            cipher.init(mode, secretKeySpec, new GCMParameterSpec(128, nonce));
             return cipher.doFinal(data);
         } catch (Exception e) {
             LogUtil.error(e);

@@ -5,20 +5,20 @@
 //import net.doge.constant.core.media.AudioQuality;
 //import net.doge.util.core.json.JsonUtil;
 //import net.doge.util.core.StringUtil;
-//import net.doge.util.os.DesktopUtil;
+//import net.doge.util.core.os.DesktopUtil;
 //
 //import java.util.HashMap;
 //import java.util.Map;
 //
-//public class BugpkNcTrackHero {
-//    private static BugpkNcTrackHero instance;
+//public class BugpkNcTrackReq {
+//    private static BugpkNcTrackReq instance;
 //
-//    private BugpkNcTrackHero() {
+//    private BugpkNcTrackReq() {
 //        initMap();
 //    }
 //
-//    public static BugpkNcTrackHero getInstance() {
-//        if (instance == null) instance = new BugpkNcTrackHero();
+//    public static BugpkNcTrackReq getInstance() {
+//        if (instance == null) instance = new BugpkNcTrackReq();
 //        return instance;
 //    }
 //
@@ -47,7 +47,7 @@
 //     * @return
 //     */
 //    public String getTrackUrl(String id, String quality) {
-//        String songBody = DesktopUtil.getRequestImpersonate(String.format(SONG_URL_API, id, qualityMap.get(quality)));
+//        String songBody = DesktopUtil.impersonateGet(String.format(SONG_URL_API, id, qualityMap.get(quality)));
 //        JSONArray data = JSONObject.parseObject(songBody).getJSONArray("data");
 //        if (JsonUtil.isEmpty(data)) return "";
 //        JSONObject urlJson = data.getJSONObject(0);
@@ -60,7 +60,7 @@
 //    }
 //
 //    public static void main(String[] args) {
-//        BugpkNcTrackHero trackHero = getInstance();
+//        BugpkNcTrackReq trackHero = getInstance();
 //        System.out.println(trackHero.getTrackUrl("2600493765", AudioQuality.KEYS[AudioQuality.STANDARD]));
 //        System.out.println(trackHero.getTrackUrl("2600493765", AudioQuality.KEYS[AudioQuality.HIGH]));
 //        System.out.println(trackHero.getTrackUrl("2600493765", AudioQuality.KEYS[AudioQuality.LOSSLESS]));

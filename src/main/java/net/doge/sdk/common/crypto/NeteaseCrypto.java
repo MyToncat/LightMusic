@@ -29,10 +29,9 @@ public class NeteaseCrypto {
         for (int i = 0, s = secretKey.length; i < s; i++)
             secretKey[i] = (byte) BASE62.charAt(secretKey[i] % 62);
         // params
-        byte[] aesBytes = CryptoUtil.aesEncrypt(data.getBytes(StandardCharsets.UTF_8), "CBC",
-                PRESET_KEY.getBytes(StandardCharsets.UTF_8), IV.getBytes(StandardCharsets.UTF_8));
+        byte[] aesBytes = CryptoUtil.aesCbcEncrypt(data.getBytes(StandardCharsets.UTF_8), PRESET_KEY.getBytes(StandardCharsets.UTF_8), IV.getBytes(StandardCharsets.UTF_8));
         byte[] base64Bytes = CryptoUtil.base64Encode(aesBytes).getBytes(StandardCharsets.UTF_8);
-        byte[] aesBytes2 = CryptoUtil.aesEncrypt(base64Bytes, "CBC", secretKey, IV.getBytes(StandardCharsets.UTF_8));
+        byte[] aesBytes2 = CryptoUtil.aesCbcEncrypt(base64Bytes, secretKey, IV.getBytes(StandardCharsets.UTF_8));
         String params = CryptoUtil.base64Encode(aesBytes2);
         // encSecKey
         ArrayUtil.reverse(secretKey);
@@ -53,7 +52,7 @@ public class NeteaseCrypto {
         String message = "nobody" + path + "use" + data + "md5forencrypt";
         String digest = CryptoUtil.md5(message);
         String dat = path + "-36cd479b6b5-" + data + "-36cd479b6b5-" + digest;
-        byte[] aesBytes = CryptoUtil.aesEncrypt(dat.getBytes(StandardCharsets.UTF_8), "ECB", EAPI_KEY.getBytes(StandardCharsets.UTF_8), null);
+        byte[] aesBytes = CryptoUtil.aesEcbEncrypt(dat.getBytes(StandardCharsets.UTF_8), EAPI_KEY.getBytes(StandardCharsets.UTF_8));
         String params = CryptoUtil.bytesToHex(aesBytes).toUpperCase();
         return "params=" + params;
     }
