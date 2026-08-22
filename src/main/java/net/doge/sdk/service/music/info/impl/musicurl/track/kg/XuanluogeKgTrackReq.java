@@ -32,23 +32,23 @@ public class XuanluogeKgTrackReq {
         qualityMap.put(AudioQuality.KEYS[AudioQuality.HIGH], "320");
         qualityMap.put(AudioQuality.KEYS[AudioQuality.LOSSLESS], "flac");
         qualityMap.put(AudioQuality.KEYS[AudioQuality.HI_RES], "high");
-        qualityMap.put(AudioQuality.KEYS[AudioQuality.ATMOSPHERE], "viper_clear");
-        qualityMap.put(AudioQuality.KEYS[AudioQuality.MASTER], "viper_atmos");
+        qualityMap.put(AudioQuality.KEYS[AudioQuality.ATMOSPHERE], "viper_atmos");
+        qualityMap.put(AudioQuality.KEYS[AudioQuality.MASTER], "viper_clear");
     }
 
     /**
      * 获取酷狗音乐歌曲链接
      *
-     * @param id      歌曲 id
+     * @param hash    歌曲 hash
      * @param quality 品质
      * @return
      */
-    public String getTrackUrl(String id, String quality) {
+    public String getTrackUrl(String hash, String quality) {
         try {
-            String songBody = HttpRequest.get(String.format(SONG_URL_KG_API, id, qualityMap.get(quality)))
+            String songBody = HttpRequest.get(String.format(SONG_URL_KG_API, hash, qualityMap.get(quality)))
                     .executeAsStr();
             JSONObject urlJson = JSONObject.parseObject(songBody);
-            if (urlJson.getIntValue("message") != 200) return "";
+            if (!"200".equals(urlJson.getString("message"))) return "";
             JSONObject data = urlJson.getJSONArray("data").getJSONObject(0);
             String trackUrl = data.getString("url");
             if (StringUtil.isEmpty(trackUrl)) return "";
@@ -59,10 +59,10 @@ public class XuanluogeKgTrackReq {
         }
     }
 
-//    public static void main(String[] args) {
-//        XuanluogeKgTrackReq trackReq = getInstance();
-//        System.out.println(trackReq.getTrackUrl("38A1E141897E5E5A01B914A90F8A1EA9", AudioQuality.KEYS[AudioQuality.STANDARD]));
-//        System.out.println(trackReq.getTrackUrl("38A1E141897E5E5A01B914A90F8A1EA9", AudioQuality.KEYS[AudioQuality.HIGH]));
-//        System.out.println(trackReq.getTrackUrl("38A1E141897E5E5A01B914A90F8A1EA9", AudioQuality.KEYS[AudioQuality.LOSSLESS]));
-//    }
+    public static void main(String[] args) {
+        XuanluogeKgTrackReq trackReq = getInstance();
+        System.out.println(trackReq.getTrackUrl("38A1E141897E5E5A01B914A90F8A1EA9", AudioQuality.KEYS[AudioQuality.STANDARD]));
+        System.out.println(trackReq.getTrackUrl("38A1E141897E5E5A01B914A90F8A1EA9", AudioQuality.KEYS[AudioQuality.HIGH]));
+        System.out.println(trackReq.getTrackUrl("38A1E141897E5E5A01B914A90F8A1EA9", AudioQuality.KEYS[AudioQuality.LOSSLESS]));
+    }
 }

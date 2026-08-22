@@ -42,7 +42,7 @@ public class XcvtsQqTrackReq {
 
     private void initMap() {
         // 标准品质
-        qualityMap.put(AudioQuality.KEYS[AudioQuality.STANDARD], "普通");
+        qualityMap.put(AudioQuality.KEYS[AudioQuality.STANDARD], "低品质");
         // HQ
         qualityMap.put(AudioQuality.KEYS[AudioQuality.HIGH], "中品质");
         qualityMap.put(AudioQuality.KEYS[AudioQuality.SUPER], "HQ高品质");
@@ -95,5 +95,7 @@ public class XcvtsQqTrackReq {
         System.out.println(trackReq.getTrackUrl("001CnSwn2xF1ee", AudioQuality.KEYS[AudioQuality.SUPER]));
         System.out.println(trackReq.getTrackUrl("0039MnYb0qxYhV", AudioQuality.KEYS[AudioQuality.LOSSLESS]));
         System.out.println(trackReq.getTrackUrl("0039MnYb0qxYhV", AudioQuality.KEYS[AudioQuality.HI_RES]));
+        System.out.println(trackReq.getTrackUrl("0039MnYb0qxYhV", AudioQuality.KEYS[AudioQuality.ATMOSPHERE]));
+        System.out.println(trackReq.getTrackUrl("0039MnYb0qxYhV", AudioQuality.KEYS[AudioQuality.MASTER]));
     }
 }
