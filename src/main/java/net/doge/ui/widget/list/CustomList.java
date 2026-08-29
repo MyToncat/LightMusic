@@ -1,5 +1,7 @@
 package net.doge.ui.widget.list;
 
+import net.doge.ui.widget.list.transferhandler.ListItemTransferHandler;
+
 import javax.swing.*;
 
 public class CustomList<E> extends JList<E> {
@@ -16,6 +18,10 @@ public class CustomList<E> extends JList<E> {
         setOpaque(false);
         // 横向滚动时自适应宽度
         setVisibleRowCount(0);
+        // 拖放支持
+        setDragEnabled(true);
+        setDropMode(DropMode.INSERT);
+        setTransferHandler(new ListItemTransferHandler<>());
     }
 
     @Override

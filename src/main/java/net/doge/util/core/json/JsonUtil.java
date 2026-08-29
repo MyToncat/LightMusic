@@ -36,7 +36,7 @@ public class JsonUtil {
     }
 
     /**
-     * 判断 Json 数组是否为 null 或 {}
+     * 判断 Json 数组是否为 null 或 []
      *
      * @param array
      * @return
@@ -46,7 +46,7 @@ public class JsonUtil {
     }
 
     /**
-     * 判断 Json 数组是否不为 null 或 {}
+     * 判断 Json 数组是否不为 null 或 []
      *
      * @param array
      * @return

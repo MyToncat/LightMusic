@@ -19202,6 +19202,8 @@ public class MainFrame extends JFrame {
 
         // 焦点(不画焦点框)
         lyricList.setFocusable(false);
+        // 不支持拖放
+        lyricList.setDragEnabled(false);
         lyricList.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         // 悬停框
 //        lyricList.addMouseMotionListener(new MouseAdapter() {
@@ -21839,7 +21841,7 @@ public class MainFrame extends JFrame {
         taskCountLabel.setForeground(textColor);
         playQueueCountLabel.setForeground(textColor);
 
-        // 音乐列表透明
+        // 列表样式
         MusicListRenderer musicListRenderer = new MusicListRenderer(player);
         musicListRenderer.setForeColor(foreColor);
         musicListRenderer.setSelectedColor(selectedColor);
@@ -21945,6 +21947,9 @@ public class MainFrame extends JFrame {
         playQueueRenderer.setIconColor(iconColor);
         playQueue.setCellRenderer(tabbedPane.getSelectedIndex() == TabIndex.PLAY_QUEUE ? playQueueRenderer : null);
         this.playQueueRenderer = playQueueRenderer;
+
+        // 列表拖放线条颜色
+        UIManager.put("List.dropLineColor", foreColor);
 
         // 描述收藏按钮
         playlistDescriptionCollectionButton.setForeground(textColor);

@@ -43,9 +43,9 @@ public class NcMusicUrlReq {
                 quality = AudioQuality.KEYS[AudioQuality.STANDARD];
                 break;
         }
-        String trackUrl = ZnnuNcTrackReq.getInstance().getTrackUrl(id, quality);
-        if (StringUtil.isEmpty(trackUrl)) trackUrl = Vincentzyu233NcTrackReq.getInstance().getTrackUrl(id, quality);
+        String trackUrl = Vincentzyu233NcTrackReq.getInstance().getTrackUrl(id, quality);
         if (StringUtil.isEmpty(trackUrl)) trackUrl = JfjtNcTrackReq.getInstance().getTrackUrl(id, quality);
+        if (StringUtil.isEmpty(trackUrl)) trackUrl = ZnnuNcTrackReq.getInstance().getTrackUrl(id, quality);
         if (StringUtil.isEmpty(trackUrl)) trackUrl = XuanluogeNcTrackReq.getInstance().getTrackUrl(id, quality);
         if (StringUtil.isEmpty(trackUrl)) trackUrl = NcTrackReq.getInstance().getTrackUrl(id, quality);
         return trackUrl;
