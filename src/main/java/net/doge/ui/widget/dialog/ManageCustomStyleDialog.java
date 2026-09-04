@@ -1,6 +1,7 @@
 package net.doge.ui.widget.dialog;
 
 import net.doge.constant.core.lang.I18n;
+import net.doge.constant.core.ui.dialog.ConfirmDialogOptions;
 import net.doge.constant.core.ui.style.UIStyleConstants;
 import net.doge.constant.core.ui.style.UIStyleStorage;
 import net.doge.entity.core.ui.UIStyle;
@@ -175,7 +176,7 @@ public class ManageCustomStyleDialog extends AbstractTitledDialog {
             }
             ConfirmDialog d = new ConfirmDialog(f, ASK_REMOVE_MSG, I18n.getText("yes"), I18n.getText("no"));
             d.showDialog();
-            if (d.getResponse() == JOptionPane.YES_OPTION) {
+            if (d.getResponse() == ConfirmDialogOptions.YES) {
                 List<UIStyle> selectedStyles = styleList.getSelectedValuesList();
                 List<UIStyle> styles = UIStyleStorage.styles;
                 selectedStyles.forEach(style -> {

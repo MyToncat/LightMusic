@@ -41,6 +41,7 @@ public class KgTrackReqV2 {
         qualityMap.put(AudioQuality.KEYS[AudioQuality.LOSSLESS], "flac");
         qualityMap.put(AudioQuality.KEYS[AudioQuality.HI_RES], "high");
         qualityMap.put(AudioQuality.KEYS[AudioQuality.ATMOSPHERE], "viper_atmos");
+        qualityMap.put(AudioQuality.KEYS[AudioQuality.MASTER], "viper_clear");
     }
 
     /**

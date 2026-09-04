@@ -31,6 +31,7 @@ import net.doge.constant.core.sort.SortOrder;
 import net.doge.constant.core.task.TaskType;
 import net.doge.constant.core.ui.Colors;
 import net.doge.constant.core.ui.Fonts;
+import net.doge.constant.core.ui.dialog.ConfirmDialogOptions;
 import net.doge.constant.core.ui.image.BlurConstants;
 import net.doge.constant.core.ui.image.ImageConstants;
 import net.doge.constant.core.ui.list.MvCompSourceType;
@@ -2862,10 +2863,10 @@ public class MainFrame extends JFrame {
                 confirmDialog.showDialog();
                 int response = confirmDialog.getResponse();
                 boolean checked = confirmDialog.isChecked();
-                if (response == JOptionPane.YES_OPTION) {
+                if (response == ConfirmDialogOptions.YES) {
                     if (checked) currCloseWindowOption = CloseWindowOptions.DISPOSE;
                     hideWindow();
-                } else if (response == JOptionPane.NO_OPTION) {
+                } else if (response == ConfirmDialogOptions.NO) {
                     if (checked) currCloseWindowOption = CloseWindowOptions.EXIT;
                     exit();
                 }
@@ -4439,7 +4440,7 @@ public class MainFrame extends JFrame {
                     // 勾选禁用自动更新
                     if (mute && checked) autoUpdate = false;
                     // 在线更新
-                    if (response == JOptionPane.YES_OPTION) {
+                    if (response == ConfirmDialogOptions.YES) {
                         UpdateDialog ud = null;
                         // 若更新包不存在或 MD5 值有差异，先开启下载框进行下载
                         if (!packageFileValid) {
@@ -4451,9 +4452,9 @@ public class MainFrame extends JFrame {
                             ConfirmDialog cd = new ConfirmDialog(THIS, UPDATE_READY_MSG, RESTART_NOW, LATER);
                             cd.showDialog();
                             int resp = cd.getResponse();
-                            if (resp == JOptionPane.YES_OPTION) startUpdate(false, keyMD5);
+                            if (resp == ConfirmDialogOptions.YES) startUpdate(false, keyMD5);
                         }
-                    } else if (response == JOptionPane.CANCEL_OPTION) releaseMenuItem.doClick();
+                    } else if (response == ConfirmDialogOptions.CANCEL) releaseMenuItem.doClick();
                 }
                 // 已是最新版
                 else if (!mute) {
@@ -4529,7 +4530,7 @@ public class MainFrame extends JFrame {
                     String.format(ASK_CLEAR_CACHE_MSG, FileUtil.getUnitString(FileUtil.size(new File(SimplePath.CACHE_PATH)))), YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response != JOptionPane.YES_OPTION) return;
+            if (response != ConfirmDialogOptions.YES) return;
             clearCache();
             new TipDialog(THIS, CLEAR_CACHE_SUCCESS_MSG).showDialog();
         });
@@ -4611,10 +4612,10 @@ public class MainFrame extends JFrame {
                             ASK_RETAIN_MUSIC_LIST_MSG, YES, NO, CANCEL);
                     confirmDialog.showDialog();
                     int response = confirmDialog.getResponse();
-                    if (response == JOptionPane.NO_OPTION) {
+                    if (response == ConfirmDialogOptions.NO) {
                         musicList.setModel(emptyListModel);
                         musicListModel.clear();
-                    } else if (response == JOptionPane.CANCEL_OPTION) return;
+                    } else if (response == ConfirmDialogOptions.CANCEL) return;
                 }
                 // 添加到歌曲目录
                 if (!catalogs.contains(dir)) catalogs.add(dir);
@@ -6575,7 +6576,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog d = new ConfirmDialog(THIS, ASK_REMOVE_LOCAL_PLAYLIST_MSG, YES, NO);
             d.showDialog();
             int response = d.getResponse();
-            if (response == JOptionPane.YES_OPTION) {
+            if (response == ConfirmDialogOptions.YES) {
                 if (currPersonalMusicTab == PersonalMusicTabIndex.LOCAL_MUSIC) {
                     localPlaylists.remove(currLocalPlaylist);
                 } else if (currPersonalMusicTab == PersonalMusicTabIndex.COLLECTION) {
@@ -6619,7 +6620,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_REIMPORT_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response != JOptionPane.YES_OPTION) return;
+            if (response != ConfirmDialogOptions.YES) return;
             if (catalogs.isEmpty()) {
                 new TipDialog(THIS, NO_CATALOG_MSG).showDialog();
                 return;
@@ -6671,7 +6672,7 @@ public class MainFrame extends JFrame {
                 ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_REMOVE_ITEMS_MSG, YES, NO);
                 confirmDialog.showDialog();
                 int response = confirmDialog.getResponse();
-                if (response != JOptionPane.YES_OPTION) return;
+                if (response != ConfirmDialogOptions.YES) return;
                 // 删除选中的文件
                 DefaultListModel<MusicResource> model = (DefaultListModel<MusicResource>) musicList.getModel();
                 // 解决删除元素带来的性能问题
@@ -6699,7 +6700,7 @@ public class MainFrame extends JFrame {
                 ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_REMOVE_ITEMS_MSG, YES, NO);
                 confirmDialog.showDialog();
                 int response = confirmDialog.getResponse();
-                if (response != JOptionPane.YES_OPTION) return;
+                if (response != ConfirmDialogOptions.YES) return;
                 // 删除选中的项目
                 for (NetResource resource : selectedValues) {
                     DefaultListModel<NetResource> model = (DefaultListModel<NetResource>) collectionList.getModel();
@@ -6729,7 +6730,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_CLEAR_LIST_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response != JOptionPane.YES_OPTION) return;
+            if (response != ConfirmDialogOptions.YES) return;
             // 清空列表
             int selectedIndex = collectionTabbedPane.getSelectedIndex();
             if (currPersonalMusicTab != PersonalMusicTabIndex.COLLECTION || selectedIndex == CollectionTabIndex.MUSIC) {
@@ -6769,7 +6770,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_DUPLICATE_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response != JOptionPane.YES_OPTION) return;
+            if (response != ConfirmDialogOptions.YES) return;
             Set<Object> set = new HashSet<>();
             DefaultListModel model = null;
             if (currPersonalMusicTab == PersonalMusicTabIndex.LOCAL_MUSIC) model = musicListModel;
@@ -6803,7 +6804,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_REVERSE_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response != JOptionPane.YES_OPTION) return;
+            if (response != ConfirmDialogOptions.YES) return;
             DefaultListModel model = null;
             if (currPersonalMusicTab == PersonalMusicTabIndex.LOCAL_MUSIC) model = musicListModel;
             else if (currPersonalMusicTab == PersonalMusicTabIndex.HISTORY) model = historyModel;
@@ -18437,7 +18438,7 @@ public class MainFrame extends JFrame {
         restartAllTasksButton.addActionListener(e -> {
             ConfirmDialog dialog = new ConfirmDialog(this, ASK_RESTART_ALL_TASKS_MSG, YES, NO);
             dialog.showDialog();
-            if (dialog.getResponse() == JOptionPane.YES_OPTION) {
+            if (dialog.getResponse() == ConfirmDialogOptions.YES) {
                 Enumeration<Task> tasks = downloadListModel.elements();
                 while (tasks.hasMoreElements()) {
                     Task task = tasks.nextElement();
@@ -18449,7 +18450,7 @@ public class MainFrame extends JFrame {
         cancelAllTasksButton.addActionListener(e -> {
             ConfirmDialog dialog = new ConfirmDialog(this, ASK_CANCEL_ALL_TASKS_MSG, YES, NO);
             dialog.showDialog();
-            if (dialog.getResponse() == JOptionPane.YES_OPTION) {
+            if (dialog.getResponse() == ConfirmDialogOptions.YES) {
                 Enumeration<Task> tasks = downloadListModel.elements();
                 while (tasks.hasMoreElements()) {
                     Task task = tasks.nextElement();
@@ -18461,7 +18462,7 @@ public class MainFrame extends JFrame {
         removeAllTasksButton.addActionListener(e -> {
             ConfirmDialog dialog = new ConfirmDialog(this, ASK_REMOVE_ALL_TASKS_MSG, YES, NO);
             dialog.showDialog();
-            if (dialog.getResponse() == JOptionPane.YES_OPTION) {
+            if (dialog.getResponse() == ConfirmDialogOptions.YES) {
                 downloadListModel.clear();
                 new TipDialog(THIS, CLEAR_SUCCESS_MSG).showDialog();
             }
@@ -18643,7 +18644,7 @@ public class MainFrame extends JFrame {
             if (tasks.isEmpty()) return;
             ConfirmDialog dialog = new ConfirmDialog(this, ASK_REMOVE_SELECTED_TASKS_MSG, YES, NO, true, ASK_REMOVE_FILE_MSG);
             dialog.showDialog();
-            if (dialog.getResponse() != JOptionPane.YES_OPTION) return;
+            if (dialog.getResponse() != ConfirmDialogOptions.YES) return;
             boolean checked = dialog.isChecked();
             downloadList.setModel(emptyListModel);
             for (Task task : tasks) {
@@ -18723,7 +18724,7 @@ public class MainFrame extends JFrame {
                 confirmDialog.showDialog();
                 int response = confirmDialog.getResponse();
                 // 删除选中的歌曲
-                if (response == JOptionPane.YES_OPTION) {
+                if (response == ConfirmDialogOptions.YES) {
                     // 解决删除元素带来的性能问题
                     playQueue.setModel(emptyListModel);
                     for (MusicResource resource : selectedValues) {
@@ -18741,7 +18742,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_CLEAR_PLAY_QUEUE_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response == JOptionPane.YES_OPTION) {
+            if (response == ConfirmDialogOptions.YES) {
                 if (!player.isEmpty()) unload();
                 playQueueModel.clear();
                 updateCurrSong();
@@ -18753,7 +18754,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_DUPLICATE_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response == JOptionPane.YES_OPTION) {
+            if (response == ConfirmDialogOptions.YES) {
                 Set<Object> set = new HashSet<>();
                 // 解决删除元素带来的性能问题
                 playQueue.setModel(emptyListModel);
@@ -18772,7 +18773,7 @@ public class MainFrame extends JFrame {
             ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_REVERSE_MSG, YES, NO);
             confirmDialog.showDialog();
             int response = confirmDialog.getResponse();
-            if (response == JOptionPane.YES_OPTION) {
+            if (response == ConfirmDialogOptions.YES) {
                 // 解决修改元素带来的性能问题
                 playQueue.setModel(emptyListModel);
                 for (int i = 0, s = playQueueModel.size(), half = s / 2; i < half; i++) {
@@ -20646,7 +20647,7 @@ public class MainFrame extends JFrame {
                     ConfirmDialog confirmDialog = new ConfirmDialog(THIS, ASK_REMOVE_FIFE_NOT_FOUND_MSG, YES, NO);
                     confirmDialog.showDialog();
                     int response = confirmDialog.getResponse();
-                    if (response == JOptionPane.YES_OPTION) {
+                    if (response == ConfirmDialogOptions.YES) {
                         model.removeElement(o);
                         // 解决删除元素带来的性能问题
                         playQueue.setModel(emptyListModel);

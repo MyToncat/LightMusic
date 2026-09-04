@@ -66,9 +66,7 @@ public class ListItemTransferHandler<T> extends TransferHandler {
 
         // 检查目标 JList 的 Model 是否为 DefaultListModel（可变模型）
         JList<?> list = (JList<?>) support.getComponent();
-        if (!(list.getModel() instanceof DefaultListModel)) {
-            return false;
-        }
+        if (!(list.getModel() instanceof DefaultListModel)) return false;
 
         // 不允许拖拽到空白区域（索引 -1）
         JList.DropLocation dropLocation = (JList.DropLocation) support.getDropLocation();

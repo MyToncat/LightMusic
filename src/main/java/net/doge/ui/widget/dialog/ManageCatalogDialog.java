@@ -3,6 +3,7 @@ package net.doge.ui.widget.dialog;
 import javafx.application.Platform;
 import javafx.stage.DirectoryChooser;
 import net.doge.constant.core.lang.I18n;
+import net.doge.constant.core.ui.dialog.ConfirmDialogOptions;
 import net.doge.constant.core.ui.style.UIStyleStorage;
 import net.doge.entity.core.ui.UIStyle;
 import net.doge.ui.MainFrame;
@@ -141,7 +142,7 @@ public class ManageCatalogDialog extends AbstractTitledDialog {
             if (catalogList.getSelectedValue() == null) return;
             ConfirmDialog d = new ConfirmDialog(f, ASK_REMOVE_MSG, I18n.getText("yes"), I18n.getText("no"));
             d.showDialog();
-            if (d.getResponse() != JOptionPane.YES_OPTION) return;
+            if (d.getResponse() != ConfirmDialogOptions.YES) return;
             List<File> cs = catalogList.getSelectedValuesList();
             for (File dir : cs) {
                 catalogListModel.removeElement(dir);

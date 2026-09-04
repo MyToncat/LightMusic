@@ -1,6 +1,7 @@
 package net.doge.ui.widget.dialog;
 
 import lombok.Getter;
+import net.doge.constant.core.ui.dialog.ConfirmDialogOptions;
 import net.doge.constant.core.ui.style.UIStyleStorage;
 import net.doge.entity.core.ui.UIStyle;
 import net.doge.ui.MainFrame;
@@ -154,15 +155,15 @@ public class ConfirmDialog extends AbstractShadowDialog {
         globalPanel.add(controlPanel, BorderLayout.SOUTH);
 
         yes.addActionListener(e -> {
-            response = JOptionPane.YES_OPTION;
+            response = ConfirmDialogOptions.YES;
             close();
         });
         no.addActionListener(e -> {
-            response = JOptionPane.NO_OPTION;
+            response = ConfirmDialogOptions.NO;
             close();
         });
         cancel.addActionListener(e -> {
-            response = JOptionPane.CANCEL_OPTION;
+            response = ConfirmDialogOptions.CANCEL;
             close();
         });
     }
